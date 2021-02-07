@@ -1,0 +1,11 @@
+D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\mi_cmd - 副本 - 副本.xlsx
+D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles
+D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\names.txt
+B
+D
+E
+H
+test
+testsheet
+True
+True

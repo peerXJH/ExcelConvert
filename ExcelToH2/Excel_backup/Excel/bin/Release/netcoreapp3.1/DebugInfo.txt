@@ -1,0 +1,213 @@
+Start!
+Sheet name: SEC3-VIN
+Open Excel '' D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\mi_cmd - 副本 - 副本.xlsx...
+Open Excel 'D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\mi_cmd - 副本 - 副本.xlsx'  success
+Get colnum success
+Start read excel
+Line: 3
+Line: 4
+	offset,name,rw,bit,someone is null
+Line: 5
+	offset,name,rw,bit,someone is null
+Line: 6
+	offset,name,rw,bit,someone is null
+Line: 7
+	offset,name,rw,bit,someone is null
+Line: 8
+	offset,name,rw,bit,someone is null
+Line: 9
+	offset,name,rw,bit,someone is null
+Line: 10
+	offset,name,rw,bit,someone is null
+Line: 11
+	offset,name,rw,bit,someone is null
+Line: 12
+	offset,name,rw,bit,someone is null
+Line: 13
+	offset,name,rw,bit,someone is null
+Line: 14
+	offset,name,rw,bit,someone is null
+Line: 15
+	offset,name,rw,bit,someone is null
+Line: 16
+	offset,name,rw,bit,someone is null
+Line: 17
+	offset,name,rw,bit,someone is null
+Line: 18
+	offset,name,rw,bit,someone is null
+Line: 19
+	offset,name,rw,bit,someone is null
+Line: 20
+	offset,name,rw,bit,someone is null
+Line: 21
+	offset,name,rw,bit,someone is null
+Line: 22
+	offset,name,rw,bit,someone is null
+Line: 23
+	offset,name,rw,bit,someone is null
+Line: 24
+	offset,name,rw,bit,someone is null
+Line: 25
+	offset,name,rw,bit,someone is null
+Line: 26
+	offset,name,rw,bit,someone is null
+Line: 27
+	offset,name,rw,bit,someone is null
+Line: 28
+Line: 29
+	offset,name,rw,bit,someone is null
+Line: 30
+	offset,name,rw,bit,someone is null
+Line: 31
+Line: 32
+	offset,name,rw,bit,someone is null
+Line: 33
+Line: 34
+	offset,name,rw,bit,someone is null
+Line: 35
+Line: 36
+	offset,name,rw,bit,someone is null
+Line: 37
+Line: 38
+	offset,name,rw,bit,someone is null
+Line: 39
+	offset,name,rw,bit,someone is null
+Line: 40
+	offset,name,rw,bit,someone is null
+Line: 41
+Line: 42
+	offset,name,rw,bit,someone is null
+Line: 43
+	offset,name,rw,bit,someone is null
+Line: 44
+	offset,name,rw,bit,someone is null
+Line: 45
+Line: 46
+	offset,name,rw,bit,someone is null
+Line: 47
+	offset,name,rw,bit,someone is null
+Line: 48
+Line: 49
+	offset,name,rw,bit,someone is null
+Line: 50
+	offset,name,rw,bit,someone is null
+Line: 51
+Line: 52
+	offset,name,rw,bit,someone is null
+Line: 53
+Line: 54
+	offset,name,rw,bit,someone is null
+Line: 55
+Line: 56
+	offset,name,rw,bit,someone is null
+Line: 57
+Line: 58
+	offset,name,rw,bit,someone is null
+Line: 59
+	offset,name,rw,bit,someone is null
+Line: 60
+Line: 61
+	offset,name,rw,bit,someone is null
+Line: 62
+	offset,name,rw,bit,someone is null
+Line: 63
+Line: 64
+	offset,name,rw,bit,someone is null
+Line: 65
+	offset,name,rw,bit,someone is null
+Line: 66
+	offset,name,rw,bit,someone is null
+Line: 67
+	offset,name,rw,bit,someone is null
+Line: 68
+	offset,name,rw,bit,someone is null
+Line: 69
+	offset,name,rw,bit,someone is null
+Line: 70
+	offset,name,rw,bit,someone is null
+Line: 71
+	offset,name,rw,bit,someone is null
+Line: 72
+Line: 73
+	offset,name,rw,bit,someone is null
+Line: 74
+Line: 75
+	offset,name,rw,bit,someone is null
+Line: 76
+Line: 77
+	offset,name,rw,bit,someone is null
+Line: 78
+Line: 79
+	offset,name,rw,bit,someone is null
+Line: 80
+Line: 81
+	offset,name,rw,bit,someone is null
+Line: 82
+Line: 83
+Line: 84
+	offset,name,rw,bit,someone is null
+Line: 85
+Line: 86
+Line: 87
+Line: 88
+	offset,name,rw,bit,someone is null
+Line: 89
+	offset,name,rw,bit,someone is null
+
+Start!
+Sheet name: CMD_MAIN
+Open Excel '' D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\mi_cmd - 副本 - 副本.xlsx...
+Open Excel 'D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\mi_cmd - 副本 - 副本.xlsx'  success
+Get colnum success
+Start read excel
+Line: 3
+Line: 4
+Line: 5
+Line: 6
+Line: 7
+Line: 8
+Line: 9
+Line: 10
+Line: 11
+Line: 12
+Line: 13
+Line: 14
+Line: 15
+Line: 16
+Line: 17
+Line: 18
+Line: 19
+Line: 20
+Line: 21
+Line: 22
+Line: 23
+Line: 24
+Line: 25
+
+Start!
+Sheet name: CMD_VIN1
+Open Excel '' D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\mi_cmd - 副本 - 副本.xlsx...
+Open Excel 'D:\xjh_program\vs_program\c#\winformapp\Exceltestfiles\mi_cmd - 副本 - 副本.xlsx'  success
+Get colnum success
+Start read excel
+Line: 3
+Line: 4
+Line: 5
+Line: 6
+Line: 7
+Line: 8
+Line: 9
+Line: 10
+Line: 11
+Line: 12
+Line: 13
+Line: 14
+Line: 15
+Line: 16
+Line: 17
+Line: 18
+Line: 19
+Line: 20
+	offset,name,rw,bit,someone is null
+Line: 21
+
