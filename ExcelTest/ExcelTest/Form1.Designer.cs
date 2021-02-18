@@ -140,6 +140,7 @@ namespace ExcelTest
             this.ckbUseDefault.TabIndex = 41;
             this.ckbUseDefault.Text = "使用默认文件名";
             this.ckbUseDefault.UseVisualStyleBackColor = true;
+            this.ckbUseDefault.CheckedChanged += new System.EventHandler(this.ckbUseDefault_CheckedChanged);
             // 
             // btStart
             // 

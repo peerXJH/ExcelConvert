@@ -284,7 +284,7 @@ namespace ExcelTest
                 string tmpTail = tmp;
                 int count = 1;
                 // 同名处理
-                foreach(string ss in log)
+                foreach (string ss in log)
                 {
                     if (tmpTail.Equals(ss))
                     {
@@ -332,7 +332,15 @@ namespace ExcelTest
             }
 
             //输出数据
-            HeaderFile hFile = new HeaderFile(tbOutputPath.Text);
+            HeaderFile hFile;
+            if (ckbUseDefault.Checked)
+            {
+                hFile = new HeaderFile(string.Format("{0}\\{1}.h", tbOutputPath.Text, tbModuleName.Text));
+            }
+            else
+            {
+                hFile = new HeaderFile(tbOutputPath.Text);
+            }
             if (!hFile.IsInitSuccess())
             {
                 MessageBox.Show("路径：" + Path.GetDirectoryName(tbOutputPath.Text) + "不存在");
@@ -344,7 +352,7 @@ namespace ExcelTest
             hFile.AddIncludeFile("gk_type.h");
             hFile.AddHeadNotes("struct");
             //hFile.AddStruct(structMember, "test");
-            hFile.AddStructWithBitField(structMemberBFB, "test");
+            hFile.AddStructWithBitField(structMemberBFB, tbModuleName.Text);
             hFile.AddFileMacroAtTail();
 
             hFile.Close();
@@ -456,7 +464,7 @@ namespace ExcelTest
             for (int i = 0; i < nameBlock.Count; i++)
             {
                 List<string> tmpList = HeaderFile.CreateBitFieldBlock("GK_U32", nameBlock[i], bitBlock[i], 32);
-                tmpList.Insert(0, "/*"+blockOffset[i]+"*/");
+                tmpList.Insert(0, "/*" + blockOffset[i] + "*/");
                 ret.Add(tmpList);
             }
 
@@ -531,6 +539,18 @@ namespace ExcelTest
                 ckbUseDefault.Checked = bool.Parse(info[index++]);
                 ckbUseConfigFile.Checked = bool.Parse(info[index++]);
                 ckbDebugInfo.Checked = bool.Parse(info[index++]);
+            }
+        }
+
+        private void ckbUseDefault_CheckedChanged(object sender, EventArgs e)
+        {
+            if(ckbUseDefault.Checked)
+            {
+                btSelectOutput.Text = "选择输出路径";
+            }
+            else
+            {
+                btSelectOutput.Text = "选择输出文件";
             }
         }
     }
