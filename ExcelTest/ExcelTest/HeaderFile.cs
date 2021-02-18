@@ -221,7 +221,7 @@ namespace XJHSelfUse
         /// <summary>
         /// 向文件追加 结构体 定义
         /// </summary>
-        /// <param name="member">结构体成员 格式要求：类型+空格+变量名'int example'或'int example : 12'</param>
+        /// <param name="member">结构体成员 格式要求：类型+空格+变量名'int example;'或'int example : 12;'</param>
         /// <param name="name">结构体的名字</param>
         public void AddStruct(List<string> member, string name)
         {
@@ -235,13 +235,33 @@ namespace XJHSelfUse
                 "{\n";
             foreach (string s in member)
             {
-                if (s.EndsWith(";"))
+                str += "    " + s + "\n";
+            }
+            str += "} " + name + ";\n";
+            HeaderWrite.WriteLine(str);
+        }
+
+        /// <summary>
+        /// 向文件追加 结构体 定义, 位域块之间会有空行
+        /// </summary>
+        /// <param name="member">结构体成员 格式要求：类型+空格+变量名'int example;'或'int example : 12;'</param>
+        /// <param name="name">结构体的名字</param>
+        public void AddStructWithBitField(List<List<string>> member, string name)
+        {
+            name = name.ToUpper();
+            if (!name.EndsWith("_S"))
+            {
+                name += "_S";
+            }
+            string str =
+                "typedef struct _" + name + "\n" +
+                "{\n";
+            foreach (List<string> l in member)
+            {
+                str += "\n";
+                foreach (string s in l)
                 {
                     str += "    " + s + "\n";
-                }
-                else
-                {
-                    str += "    " + s + ";\n";
                 }
             }
             str += "} " + name + ";\n";
@@ -349,6 +369,14 @@ namespace XJHSelfUse
             return ret;
         }
 
+        /// <summary>
+        /// 生成位域块，位数不足会自动使用无名位域补全
+        /// </summary>
+        /// <param name="type">变量类型</param>
+        /// <param name="name">变量名</param>
+        /// <param name="bitRange">位域范围，格式要求： [a:b]或[a] a、b为数字且a>=b</param>
+        /// <param name="typeBitNum">该类型的位数</param>
+        /// <returns>字符串列表</returns>
         static public List<string> CreateBitFieldBlock(string type, List<string> name, List<string> bitRange, int typeBitNum)
         {
             List<string> ret = new List<string>();
@@ -358,7 +386,7 @@ namespace XJHSelfUse
             for (int i = 0; i < name.Count; i++)
             {
                 int start = GetStartBit(bitRange[i]);
-                if (start - end != 1)
+                if (start - end != 1) // 无名位域
                 {
                     bitNum.Add(start - end - 1);
                     nameTmp.Add("");
@@ -387,6 +415,11 @@ namespace XJHSelfUse
             return ret;
         }
 
+        /// <summary>
+        /// 获取开始位
+        /// </summary>
+        /// <param name="bitRange">位域范围，格式要求： [a:b]或[a] a、b为数字且a>=b</param>
+        /// <returns>开始位</returns>
         static public int GetStartBit(string bitRange)
         {
             string pattern = @"([0-9]+)\]";
@@ -395,6 +428,11 @@ namespace XJHSelfUse
             return int.Parse(ma.Groups[1].Value);
         }
 
+        /// <summary>
+        /// 获取结束位
+        /// </summary>
+        /// <param name="bitRange">位域范围，格式要求： [a:b]或[a] a、b为数字且a>=b</param>
+        /// <returns>结束位</returns>
         static public int GetEndBit(string bitRange)
         {
             string pattern = @"\[([0-9]+)";

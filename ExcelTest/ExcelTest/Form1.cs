@@ -256,7 +256,7 @@ namespace ExcelTest
             List<List<string>> result = ReadSheet(sheet, row, col);
             AddDisplayLineInfo(string.Format("Read sheet [{0}] over", sheet.SheetName));
 
-            for(int i=0;i<result[0].Count;i++)
+            for (int i = 0; i < result[0].Count; i++)
             {
                 AddDisplayInfo(result[0][i].PadRight(8));
                 AddDisplayInfo(result[1][i].PadRight(20));
@@ -299,11 +299,20 @@ namespace ExcelTest
 
             //格式化数据
             //struct
-            List<string> structMember = FormatStructMember(phy, log, bit);
+            //List<string> structMember = FormatStructMember(phy, log, bit);
+            List<List<string>> structMemberBFB = FormatStructMemberWithBFB(phy, log, bit);
 
-            for (int i = 0; i < structMember.Count; i++)
+            //for (int i = 0; i < structMember.Count; i++)
+            //{
+            //    AddDisplayLineInfo(structMember[i]);
+            //}
+
+            foreach (List<string> l in structMemberBFB)
             {
-                AddDisplayLineInfo(structMember[i]);
+                foreach (string s in l)
+                {
+                    AddDisplayLineInfo(s);
+                }
             }
 
             //输出数据
@@ -318,7 +327,8 @@ namespace ExcelTest
             hFile.AddHeadNotes("include");
             hFile.AddIncludeFile("gk_type.h");
             hFile.AddHeadNotes("struct");
-            hFile.AddStruct(structMember, "test");
+            //hFile.AddStruct(structMember, "test");
+            hFile.AddStructWithBitField(structMemberBFB, "test");
             hFile.AddFileMacroAtTail();
 
             hFile.Close();
@@ -355,11 +365,9 @@ namespace ExcelTest
             return ret;
         }
 
-        List<string> FormatStructMember(List<string> offset, List<string> name, List<string> bitRange)
+        List<List<string>> FormatStructMemberWithBFB(List<string> offset, List<string> name, List<string> bitRange)
         {
-            List<string> ret = new List<string>();
-            int start = 0;
-            int end = 0;
+            List<List<string>> ret = new List<List<string>>();
 
             // 按位域分块
             string tmp = offset[0];
@@ -378,17 +386,45 @@ namespace ExcelTest
 
             for (int i = 1; i < offset.Count; i++)
             {
-                if (offset[i] == tmp)
+                if (offset[i] == tmp) // 偏移值相同的块
                 {
-                    nameTmp.Add(name[i]);
-                    bitTmp.Add(bitRange[i]);
+                    // 按照位域的先后顺序添加元素
+                    if (bitTmp.Count == 0) // 块内无元素，则直接添加
+                    {
+                        nameTmp.Add(name[i]);
+                        bitTmp.Add(bitRange[i]);
+                    }
+                    else
+                    {
+                        // 新元素的开始位最大，则添加到末尾
+                        if (GetStartBit(bitRange[i]) > GetEndBit(bitTmp[bitTmp.Count - 1]))
+                        {
+                            nameTmp.Add(name[i]);
+                            bitTmp.Add(bitRange[i]);
+                        }
+                        else
+                        {
+                            for (int j = 0; j < bitTmp.Count; j++)
+                            {
+                                // 查找新元素应该放入的位置
+                                if (GetEndBit(bitRange[i]) < GetStartBit(bitTmp[j]))
+                                {
+                                    nameTmp.Insert(j, name[i]);
+                                    bitTmp.Insert(j, bitRange[i]);
+                                    break;
+                                }
+                            }
+                        }
+                    }
                 }
-                else
+                else // 偏移值不同，开辟新块
                 {
+                    // 将前一个位域块添加到对应的block
                     nameBlock.Add(nameTmp);
                     bitBlock.Add(bitTmp);
-
+                    // 获取新的偏移值
                     tmp = offset[i];
+                    // new新块
                     nameTmp = new List<string>();
                     bitTmp = new List<string>();
                     nameTmp.Add(name[i]);
@@ -400,7 +436,20 @@ namespace ExcelTest
 
             for (int i = 0; i < nameBlock.Count; i++)
             {
-                ret.InsertRange(ret.Count, HeaderFile.CreateBitFieldBlock("GK_U32", nameBlock[i], bitBlock[i], 32));
+                ret.Add(HeaderFile.CreateBitFieldBlock("GK_U32", nameBlock[i], bitBlock[i], 32));
+            }
+
+            return ret;
+        }
+
+        List<string> FormatStructMember(List<string> offset, List<string> name, List<string> bitRange)
+        {
+            List<List<string>> result = FormatStructMemberWithBFB(offset, name, bitRange);
+            List<string> ret = new List<string>();
+
+            for (int i = 0; i < result.Count; i++)
+            {
+                ret.InsertRange(ret.Count, result[i]);
             }
 
             return ret;
