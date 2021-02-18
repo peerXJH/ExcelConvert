@@ -409,7 +409,44 @@ namespace XJHSelfUse
             int reserved = typeBitNum - sum;
             if (reserved > 0)
             {
-                ret.Add(type + " : " + reserved + ";");
+                ret.Add(type + "  : " + reserved + ";");
+            }
+
+            // 给位域加注释
+            List<string> notes = new List<string>();
+            int tmp = 0;
+            foreach (int n in bitNum)
+            {
+                if (n == 1)
+                {
+                    notes.Add(string.Format("/* [{0}]", tmp).PadRight(11) + "*/");
+                }
+                else
+                {
+                    notes.Add(string.Format("/* [{0}:{1}]", tmp + n - 1, tmp).PadRight(11) + "*/");
+                }
+                tmp += n;
+            }
+            if (reserved > 0)
+            {
+                if (reserved == 1)
+                {
+                    notes.Add(string.Format("/* [{0}]", tmp).PadRight(11) + "*/");
+                }
+                else
+                {
+                    notes.Add(string.Format("/* [{0}:{1}]", tmp + reserved - 1, tmp).PadRight(11) + "*/");
+                }
+            }
+
+            int maxLen = 0;
+            foreach (string s in ret)
+            {
+                maxLen = s.Length > maxLen ? s.Length : maxLen;
+            }
+            for (int i = 0; i < ret.Count; i++)
+            {
+                ret[i] = ret[i].PadRight(maxLen + 1) + notes[i];
             }
 
             return ret;

@@ -238,7 +238,7 @@ namespace ExcelTest
             // 读取工作表里指定的内容
             List<int> row = new List<int>
             {
-                int.Parse(tbStartRow.Text),
+                int.Parse(tbStartRow.Text)-1,
                 int.Parse(tbEndRow.Text)
             };
             Excel.LetterToInt(tbPhyRegCol.Text, out int phycol);
@@ -263,6 +263,7 @@ namespace ExcelTest
                 AddDisplayInfo(result[2][i].PadRight(8));
                 AddDisplayLineInfo(result[3][i].PadRight(10));
             }
+            AddDisplayLineInfo("");
 
             // 规范化数据
             List<string> phy = new List<string>();
@@ -277,7 +278,22 @@ namespace ExcelTest
             foreach (string s in result[1])
             {
                 // 字母转大写去除空格并将除字母数字外的字符转化为下划线
-                log.Add(Regex.Replace(s.ToUpper().Trim().Replace(" ", ""), @"\W+", "_"));// 名字
+                string tmp = Regex.Replace(s.ToUpper().Trim().Replace(" ", ""), @"\W+", "_");
+                tmp = Regex.Replace(tmp, @"_+\z", ""); // 去掉末尾的下划线
+
+                string tmpTail = tmp;
+                int count = 1;
+                // 同名处理
+                foreach(string ss in log)
+                {
+                    if (tmpTail.Equals(ss))
+                    {
+                        tmpTail = tmp + "_" + count.ToString();
+                        count++;
+                    }
+                }
+
+                log.Add(tmpTail);// 名字
             }
             foreach (string s in result[2])
             {
@@ -373,6 +389,7 @@ namespace ExcelTest
             string tmp = offset[0];
             List<List<string>> nameBlock = new List<List<string>>();
             List<List<string>> bitBlock = new List<List<string>>();
+            List<string> blockOffset = new List<string>();
             List<string> nameTmp = new List<string>();
             List<string> bitTmp = new List<string>();
             List<int> bitNUm = new List<int>();
@@ -383,6 +400,7 @@ namespace ExcelTest
             }
             nameTmp.Add(name[0]);
             bitTmp.Add(bitRange[0]);
+            blockOffset.Add(offset[0]);
 
             for (int i = 1; i < offset.Count; i++)
             {
@@ -422,6 +440,7 @@ namespace ExcelTest
                     // 将前一个位域块添加到对应的block
                     nameBlock.Add(nameTmp);
                     bitBlock.Add(bitTmp);
+                    blockOffset.Add(offset[i]);
                     // 获取新的偏移值
                     tmp = offset[i];
                     // new新块
@@ -436,7 +455,9 @@ namespace ExcelTest
 
             for (int i = 0; i < nameBlock.Count; i++)
             {
-                ret.Add(HeaderFile.CreateBitFieldBlock("GK_U32", nameBlock[i], bitBlock[i], 32));
+                List<string> tmpList = HeaderFile.CreateBitFieldBlock("GK_U32", nameBlock[i], bitBlock[i], 32);
+                tmpList.Insert(0, "/*"+blockOffset[i]+"*/");
+                ret.Add(tmpList);
             }
 
             return ret;
