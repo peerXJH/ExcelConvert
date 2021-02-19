@@ -102,6 +102,23 @@ namespace XJHSelfUse
                 return file;
             }
         }
+
+        public static List<string> ReadFile(string fileName)
+        {
+            List<string> ret = new List<string>();
+
+            if (File.Exists(fileName))
+            {
+                StreamReader reader = new StreamReader(fileName);
+                string tmp;
+
+                while((tmp = reader.ReadLine()) != null)
+                {
+                    ret.Add(tmp);
+                }
+            }
+            return ret;
+        }
     }
 
 

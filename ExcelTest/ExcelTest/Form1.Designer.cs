@@ -29,6 +29,7 @@ namespace ExcelTest
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             this.ckbDebugInfo = new System.Windows.Forms.CheckBox();
             this.tbConfigFilePath = new System.Windows.Forms.TextBox();
             this.btSelectConfigFile = new System.Windows.Forms.Button();
@@ -133,6 +134,8 @@ namespace ExcelTest
             // ckbUseDefault
             // 
             this.ckbUseDefault.AutoSize = true;
+            this.ckbUseDefault.Checked = true;
+            this.ckbUseDefault.CheckState = System.Windows.Forms.CheckState.Checked;
             this.ckbUseDefault.Location = new System.Drawing.Point(12, 198);
             this.ckbUseDefault.Margin = new System.Windows.Forms.Padding(2, 3, 2, 3);
             this.ckbUseDefault.Name = "ckbUseDefault";
@@ -151,6 +154,7 @@ namespace ExcelTest
             this.btStart.TabIndex = 40;
             this.btStart.Text = "开始";
             this.btStart.UseVisualStyleBackColor = true;
+            this.btStart.Click += new System.EventHandler(this.btStart_Click);
             // 
             // tbSheetName
             // 
@@ -375,6 +379,7 @@ namespace ExcelTest
             this.Controls.Add(this.tbInputPath);
             this.Controls.Add(this.btSelectOutput);
             this.Controls.Add(this.btSelectInput);
+            this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MinimumSize = new System.Drawing.Size(700, 440);
             this.Name = "Form1";
             this.Text = "Form1";

@@ -55,6 +55,32 @@ namespace ExcelTest
             }
         }
 
+        private void SettbStartRowValue(string str)
+        {
+            if (tbStartRow.InvokeRequired)
+            {
+                SetTextValueCallBack callBack = new SetTextValueCallBack(SettbStartRowValue);
+                tbStartRow.Invoke(callBack, str);
+            }
+            else
+            {
+                tbStartRow.Text = str;
+            }
+        }
+
+        private void SettbEndRowValue(string str)
+        {
+            if (tbEndRow.InvokeRequired)
+            {
+                SetTextValueCallBack callBack = new SetTextValueCallBack(SettbEndRowValue);
+                tbEndRow.Invoke(callBack, str);
+            }
+            else
+            {
+                tbEndRow.Text = str;
+            }
+        }
+
         private void AddDisplayInfo(string str)
         {
             if (rtbTips.InvokeRequired)
@@ -143,6 +169,8 @@ namespace ExcelTest
                 tbRWCol.Enabled = false;
                 tbEndRow.Enabled = false;
                 tbStartRow.Enabled = false;
+
+                ckbUseDefault.Checked = true;
             }
             else
             {
@@ -161,39 +189,40 @@ namespace ExcelTest
 
         private void btTest_Click(object sender, EventArgs e)
         {
-            ParseSheet();
             SaveUserInfo();
-            /*List<string> name = new List<string>
+            if (ckbUseConfigFile.Checked)
             {
-                "name1",
-                "name2",
-                "name3",
-                "name13",
-                "name21"
-            };
-            List<string> offset = new List<string>
+                if (!File.Exists(tbConfigFilePath.Text))
+                {
+                    MessageBox.Show(
+                        string.Format("the config file is not exists. [file: {0}]", tbConfigFilePath.Text));
+                    return;
+                }
+                List<string> config = FileSelect.ReadFile(tbConfigFilePath.Text);
+                List<string> startRow = new List<string>();
+                List<string> endRow = new List<string>();
+                List<string> moduleName = new List<string>();
+                List<string> sheetName = new List<string>();
+                for (int i = 3; i < config.Count; i += 4)
+                {
+                    sheetName.Add(config[i - 3].Trim().Split(": ")[1]);
+                    moduleName.Add(config[i - 2].Trim().Split(": ")[1]);
+                    startRow.Add(config[i - 1].Trim().Split(": ")[1]);
+                    endRow.Add(config[i].Trim().Split(": ")[1]);
+                }
+                for (int i = 0; i < startRow.Count; i++)
+                {
+                    SettbSheetNameValue(sheetName[i]);
+                    SettbModuleNameValue(moduleName[i]);
+                    SettbStartRowValue(startRow[i]);
+                    SettbEndRowValue(endRow[i]);
+                    ParseSheet();
+                }
+            }
+            else
             {
-                "0x00",
-                "0x01",
-                "0x01",
-                "0x01",
-                "0x02"
-            };
-            List<string> range = new List<string>
-            {
-                "[31:0]",
-                "[0]",
-                "[10:2]",
-                "[20:11]",
-                "[15:0]"
-            };
-
-            List<string> tt = FormatStructMember(offset, name, range);
-            foreach (string s in tt)
-            {
-                AddDisplayLineInfo(s);
-            }*/
-
+                ParseSheet();
+            }
         }
 
         void ThreadTest()
@@ -209,7 +238,40 @@ namespace ExcelTest
 
         void Start()
         {
-
+            SaveUserInfo();
+            if (ckbUseConfigFile.Checked)
+            {
+                if (!File.Exists(tbConfigFilePath.Text))
+                {
+                    MessageBox.Show(
+                        string.Format("the config file is not exists. [file: {0}]", tbConfigFilePath.Text));
+                    return;
+                }
+                List<string> config = FileSelect.ReadFile(tbConfigFilePath.Text);
+                List<string> startRow = new List<string>();
+                List<string> endRow = new List<string>();
+                List<string> moduleName = new List<string>();
+                List<string> sheetName = new List<string>();
+                for (int i = 3; i < config.Count; i += 4)
+                {
+                    sheetName.Add(config[i - 3].Trim().Split(": ")[1]);
+                    moduleName.Add(config[i - 2].Trim().Split(": ")[1]);
+                    startRow.Add(config[i - 1].Trim().Split(": ")[1]);
+                    endRow.Add(config[i].Trim().Split(": ")[1]);
+                }
+                for (int i = 0; i < startRow.Count; i++)
+                {
+                    SettbSheetNameValue(sheetName[i]);
+                    SettbModuleNameValue(moduleName[i]);
+                    SettbStartRowValue(startRow[i]);
+                    SettbEndRowValue(endRow[i]);
+                    ParseSheet();
+                }
+            }
+            else
+            {
+                ParseSheet();
+            }
         }
 
         void ParseSheet()
@@ -239,7 +301,7 @@ namespace ExcelTest
             List<int> row = new List<int>
             {
                 int.Parse(tbStartRow.Text)-1,
-                int.Parse(tbEndRow.Text)
+                int.Parse(tbEndRow.Text)-1
             };
             Excel.LetterToInt(tbPhyRegCol.Text, out int phycol);
             Excel.LetterToInt(tbLogRegCol.Text, out int logcol);
@@ -256,14 +318,17 @@ namespace ExcelTest
             List<List<string>> result = ReadSheet(sheet, row, col);
             AddDisplayLineInfo(string.Format("Read sheet [{0}] over", sheet.SheetName));
 
-            for (int i = 0; i < result[0].Count; i++)
+            if (ckbDebugInfo.Checked)
             {
-                AddDisplayInfo(result[0][i].PadRight(8));
-                AddDisplayInfo(result[1][i].PadRight(20));
-                AddDisplayInfo(result[2][i].PadRight(8));
-                AddDisplayLineInfo(result[3][i].PadRight(10));
+                for (int i = 0; i < result[0].Count; i++)
+                {
+                    AddDisplayInfo(result[0][i].PadRight(8));
+                    AddDisplayInfo(result[1][i].PadRight(40));
+                    AddDisplayInfo(result[2][i].PadRight(8));
+                    AddDisplayLineInfo(result[3][i].PadRight(10));
+                }
+                AddDisplayLineInfo("");
             }
-            AddDisplayLineInfo("");
 
             // 规范化数据
             List<string> phy = new List<string>();
@@ -305,12 +370,68 @@ namespace ExcelTest
                 bit.Add(s.Trim().Replace(" ", ""));// 有效bit位  如：[15:0]或[0]
             }
 
+            if (ckbDebugInfo.Checked)
+            {
+                for (int i = 0; i < phy.Count; i++)
+                {
+                    AddDisplayInfo(phy[i].PadRight(8));
+                    AddDisplayInfo(log[i].PadRight(40));
+                    AddDisplayInfo(rw[i].PadRight(8));
+                    AddDisplayLineInfo(bit[i].PadRight(10));
+                }
+                AddDisplayLineInfo("");
+            }
+
+            //检查合规性
+            List<int> record = new List<int>();
             for (int i = 0; i < phy.Count; i++)
             {
-                AddDisplayInfo(phy[i].PadRight(8));
-                AddDisplayInfo(log[i].PadRight(20));
-                AddDisplayInfo(rw[i].PadRight(8));
-                AddDisplayLineInfo(bit[i].PadRight(10));
+                bool flag = true;
+                if (CheckOffset(phy[i]) == false)
+                {
+                    record.Add(i);
+                    flag = false;
+                    AddDisplayLineInfo(string.Format("row:{0}  offset format is wrong",
+                        i + int.Parse(tbStartRow.Text)));
+                }
+                if (CheckName(log[i]) == false)
+                {
+                    if (flag)
+                    {
+                        record.Add(i);
+                        flag = false;
+                    }
+                    AddDisplayLineInfo(string.Format("row:{0}  name format is wrong",
+                        i + int.Parse(tbStartRow.Text)));
+                }
+                if (CheckRW(rw[i]) == false)
+                {
+                    if (flag)
+                    {
+                        record.Add(i);
+                        flag = false;
+                    }
+                    AddDisplayLineInfo(string.Format("row:{0}  rw format is wrong",
+                        i + int.Parse(tbStartRow.Text)));
+                }
+                if (CheckBitRange(bit[i]) == false)
+                {
+                    if (flag)
+                    {
+                        record.Add(i);
+                        flag = false;
+                    }
+                    AddDisplayLineInfo(string.Format("row:{0}  bit format is wrong",
+                        i + int.Parse(tbStartRow.Text)));
+                }
+            }
+
+            for (int i = record.Count - 1; i >= 0; i--)
+            {
+                phy.RemoveAt(record[i]);
+                log.RemoveAt(record[i]);
+                rw.RemoveAt(record[i]);
+                bit.RemoveAt(record[i]);
             }
 
             //格式化数据
@@ -323,11 +444,14 @@ namespace ExcelTest
             //    AddDisplayLineInfo(structMember[i]);
             //}
 
-            foreach (List<string> l in structMemberBFB)
+            if (ckbDebugInfo.Checked)
             {
-                foreach (string s in l)
+                foreach (List<string> l in structMemberBFB)
                 {
-                    AddDisplayLineInfo(s);
+                    foreach (string s in l)
+                    {
+                        AddDisplayLineInfo(s);
+                    }
                 }
             }
 
@@ -336,15 +460,20 @@ namespace ExcelTest
             if (ckbUseDefault.Checked)
             {
                 hFile = new HeaderFile(string.Format("{0}\\{1}.h", tbOutputPath.Text, tbModuleName.Text));
+                if (!hFile.IsInitSuccess())
+                {
+                    MessageBox.Show("路径：" + tbOutputPath.Text + "不存在");
+                    return;
+                }
             }
             else
             {
                 hFile = new HeaderFile(tbOutputPath.Text);
-            }
-            if (!hFile.IsInitSuccess())
-            {
-                MessageBox.Show("路径：" + Path.GetDirectoryName(tbOutputPath.Text) + "不存在");
-                return;
+                if (!hFile.IsInitSuccess())
+                {
+                    MessageBox.Show("路径：" + Path.GetDirectoryName(tbOutputPath.Text) + "不存在");
+                    return;
+                }
             }
             hFile.AddFileHeadNotes();
             hFile.AddFileMacroAtHead();
@@ -376,7 +505,7 @@ namespace ExcelTest
             foreach (int i in col)
             {
                 tmp = new List<string>();
-                for (int j = row[0]; j < row[1]; j++)
+                for (int j = row[0]; j <= row[1]; j++)
                 {
                     if (Excel.GetCellValue(sheet, j, i, out string str))
                     {
@@ -389,23 +518,30 @@ namespace ExcelTest
             return ret;
         }
 
+        /// <summary>
+        /// 格式化结构体成员，由输入的偏移值，变量名和位域范围合成结构体成员变量，并以位域块的形式输出
+        /// </summary>
+        /// <param name="offset">偏移值</param>
+        /// <param name="name">变量名</param>
+        /// <param name="bitRange">位域范围</param>
+        /// <returns>返回二维列表，以偏移值相同的变量组成一个块(List)</returns>
         List<List<string>> FormatStructMemberWithBFB(List<string> offset, List<string> name, List<string> bitRange)
         {
             List<List<string>> ret = new List<List<string>>();
 
             // 按位域分块
             string tmp = offset[0];
-            List<List<string>> nameBlock = new List<List<string>>();
-            List<List<string>> bitBlock = new List<List<string>>();
-            List<string> blockOffset = new List<string>();
-            List<string> nameTmp = new List<string>();
-            List<string> bitTmp = new List<string>();
-            List<int> bitNUm = new List<int>();
+            List<List<string>> nameBlock = new List<List<string>>(); // 多个变量名的块
+            List<List<string>> bitBlock = new List<List<string>>(); // 多个位块
+            List<string> blockOffset = new List<string>(); // 每个块对应的偏移值
+            List<string> nameTmp = new List<string>(); // 一个临时变量名块
+            List<string> bitTmp = new List<string>(); // 一个临时位块
+            //List<int> bitNUm = new List<int>();
 
-            foreach (string s in bitRange)
-            {
-                bitNUm.Add(GetEndBit(s) - GetStartBit(s) + 1);
-            }
+            //foreach (string s in bitRange)
+            //{
+            //    bitNUm.Add(GetEndBit(s) - GetStartBit(s) + 1);
+            //}
             nameTmp.Add(name[0]);
             bitTmp.Add(bitRange[0]);
             blockOffset.Add(offset[0]);
@@ -484,6 +620,78 @@ namespace ExcelTest
             return ret;
         }
 
+        bool CheckOffset(string offset)
+        {
+            if (string.IsNullOrWhiteSpace(offset))
+            {
+                return false;
+            }
+            else
+            {
+                if (Regex.IsMatch(offset, @"\A0x[0-9a-f]+\z"))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        bool CheckName(string name)
+        {
+            if (string.IsNullOrWhiteSpace(name))
+            {
+                return false;
+            }
+            else
+            {
+                return true;
+            }
+        }
+
+        bool CheckRW(string rw)
+        {
+            if (string.IsNullOrWhiteSpace(rw))
+            {
+                return false;
+            }
+            else
+            {
+                if (Regex.IsMatch(rw, @"r") ||
+                    Regex.IsMatch(rw, @"w"))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
+        bool CheckBitRange(string bitRange)
+        {
+            if (string.IsNullOrWhiteSpace(bitRange))
+            {
+                return false;
+            }
+            else
+            {
+                if (Regex.IsMatch(bitRange, @"\A\[[0-9]+\]\z") ||
+                    Regex.IsMatch(bitRange, @"\A\[[0-9]+:[0-9]+\]\z") ||
+                    Regex.IsMatch(bitRange, @"\A\[[0-9]+：[0-9]+\]\z"))
+                {
+                    return true;
+                }
+                else
+                {
+                    return false;
+                }
+            }
+        }
+
         int GetStartBit(string bitRange)
         {
             string pattern = @"([0-9]+)\]";
@@ -544,14 +752,25 @@ namespace ExcelTest
 
         private void ckbUseDefault_CheckedChanged(object sender, EventArgs e)
         {
-            if(ckbUseDefault.Checked)
+            if (ckbUseDefault.Checked)
             {
                 btSelectOutput.Text = "选择输出路径";
             }
             else
             {
                 btSelectOutput.Text = "选择输出文件";
+                ckbUseConfigFile.Checked = false;
             }
+        }
+
+        private void btStart_Click(object sender, EventArgs e)
+        {
+            //创建线程
+            Thread thread = new Thread(new ThreadStart(Start));
+            //设置为后台线程
+            thread.IsBackground = true;
+            //开始运行线程
+            thread.Start();
         }
     }
 }

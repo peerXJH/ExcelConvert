@@ -19,6 +19,12 @@
         "OwnerKey" = "8:_UNDEFINED"
         "MsmSig" = "8:_UNDEFINED"
         }
+        "Entry"
+        {
+        "MsmKey" = "8:_F6B347B58EA14A6C91E44AAEEF54835E"
+        "OwnerKey" = "8:_UNDEFINED"
+        "MsmSig" = "8:_UNDEFINED"
+        }
     }
     "Configurations"
     {
@@ -70,10 +76,40 @@
         {
             "LaunchCondition"
             {
+                "{A06ECF26-33A3-4562-8140-9B0E340D4F24}:_9F6C63C740FA4C418009303EF770DAA4"
+                {
+                "Name" = "8:.NET Core"
+                "Message" = "8:[VSDNETCOREMSG]"
+                "AllowLaterVersions" = "11:FALSE"
+                "InstallUrl" = "8:https://dotnet.microsoft.com/download/dotnet-core/[NetCoreVerMajorDotMinor]"
+                "IsNETCore" = "11:TRUE"
+                "Architecture" = "2:0"
+                "Runtime" = "2:0"
+                }
             }
         }
         "File"
         {
+            "{1FB2D0AE-D3B9-43D4-B9DD-F88EC61E35DE}:_F6B347B58EA14A6C91E44AAEEF54835E"
+            {
+            "SourcePath" = "8:..\\ExcelTest\\exceltest.ico"
+            "TargetName" = "8:exceltest.ico"
+            "Tag" = "8:"
+            "Folder" = "8:_D2C6F4072D404B05B73CDA0437AD95D5"
+            "Condition" = "8:"
+            "Transitive" = "11:FALSE"
+            "Vital" = "11:TRUE"
+            "ReadOnly" = "11:FALSE"
+            "Hidden" = "11:FALSE"
+            "System" = "11:FALSE"
+            "Permanent" = "11:FALSE"
+            "SharedLegacy" = "11:FALSE"
+            "PackageAs" = "3:1"
+            "Register" = "3:1"
+            "Exclude" = "11:FALSE"
+            "IsDependency" = "11:FALSE"
+            "IsolateTo" = "8:"
+            }
         }
         "FileType"
         {
@@ -141,15 +177,15 @@
         {
         "Name" = "8:Microsoft Visual Studio"
         "ProductName" = "8:ExcelTestSetup"
-        "ProductCode" = "8:{21C4E73C-42DE-4BD9-A125-BBB43EC8A5C6}"
-        "PackageCode" = "8:{0A5E1570-A348-44B9-9823-4213A33CD27C}"
+        "ProductCode" = "8:{9A0CBF15-1884-4A1E-862C-25EA8F006236}"
+        "PackageCode" = "8:{BD3E57EE-35BF-4713-B043-3CED304417D6}"
         "UpgradeCode" = "8:{F05864D2-A4A8-4685-AAA9-7BF31DE296D2}"
         "AspNetVersion" = "8:2.0.50727.0"
         "RestartWWWService" = "11:FALSE"
         "RemovePreviousVersions" = "11:TRUE"
         "DetectNewerInstalledVersion" = "11:TRUE"
         "InstallAllUsers" = "11:TRUE"
-        "ProductVersion" = "8:1.0.0"
+        "ProductVersion" = "8:1.0.1"
         "Manufacturer" = "8:xuejianhuan"
         "ARPHELPTELEPHONE" = "8:"
         "ARPHELPLINK" = "8:"
@@ -273,7 +309,7 @@
             "Target" = "8:_7E6635E43AEA4751BD1811339EAB4ED4"
             "Folder" = "8:_2EB8A5936CBB4B599C825B51760775A7"
             "WorkingFolder" = "8:_D2C6F4072D404B05B73CDA0437AD95D5"
-            "Icon" = "8:"
+            "Icon" = "8:_F6B347B58EA14A6C91E44AAEEF54835E"
             "Feature" = "8:"
             }
         }
@@ -677,7 +713,7 @@
         {
             "{5259A561-127C-4D43-A0A1-72F10C7B3BF8}:_7E6635E43AEA4751BD1811339EAB4ED4"
             {
-            "SourcePath" = "8:..\\ExcelTest\\obj\\Debug\\netcoreapp3.1\\apphost.exe"
+            "SourcePath" = "8:..\\ExcelTest\\obj\\Release\\netcoreapp3.1\\apphost.exe"
             "TargetName" = "8:"
             "Tag" = "8:"
             "Folder" = "8:_D2C6F4072D404B05B73CDA0437AD95D5"
